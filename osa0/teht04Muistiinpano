@@ -1,1 +1,19 @@
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note
+palvelin-->Post onnistui,status code 200
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/notes
+palvelin-->selain: HTML-koodi
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://fullstack-exampleapp.herokuapp.com/main.js
+palvelin-->selain: main.js
 
+note over selain:
+selain alkaa suorittaa js-koodia
+pyytää ajaxin avulla json datan
+end note
+
+
+note over selain:
+selain suorittaa tapahtumankäsittelijän
+joka tuo muistiinpanot näytölle
+end note
