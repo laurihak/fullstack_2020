@@ -1,0 +1,12 @@
+selain->palvelin: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+palvelin-->selain: HTML-koodi
+
+
+note over selain:
+Lähetetään uusi muistiinpano json muotoinen
+end note
+
+
+note over selain:
+Ei haeta html koodia uudestaan vaan javascript luo uuden taulukko olion ja kirjoittaa sen palvelimelle lisäen uuden muistiinpanon.
+end note
