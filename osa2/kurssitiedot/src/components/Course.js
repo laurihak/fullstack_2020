@@ -8,7 +8,7 @@ const Course = ({ course }) => {
     console.log({course})
     return (
       <>
-        <Header name={course.name} />
+        <Header name={course.name}  />
         <Content parts={course.parts} />
         <Total parts={course.parts} />
         </>

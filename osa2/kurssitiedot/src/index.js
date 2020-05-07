@@ -7,6 +7,7 @@ import Courses from './components/Courses'
 
 
 const App = () => {
+  
   const courses = [
     {
       name: 'Half Stack application development',
@@ -49,9 +50,11 @@ const App = () => {
 
   return (
     <div>
+      
       <Courses courses={courses} />
     </div>
   )
 }
+
 
 ReactDOM.render(<App />, document.getElementById("root"));
