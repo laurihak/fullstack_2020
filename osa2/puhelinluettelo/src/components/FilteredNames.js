@@ -2,13 +2,13 @@ import React from 'react'
 import Names from './Names'
 import Person from './Person'
 
-const FilteredNames = (props) => {
+const FilteredNames = ({ persons, filter, handlePersonDelete }) => {
 
-    if (props.filter.length > 0) {
-        const filtered = props.persons.filter(obj => obj.name.toLowerCase().includes(props.filter)).map(person => {
+    if (filter.length > 0) {
+        const filtered = persons.filter(obj => obj.name.toLowerCase().includes(filter)).map((person, i) => {
             return (
-                <div key={person.name}>
-                    <Person name={person.name} number={person.number} />
+                <div key={i}>
+                    <Person name={person.name} number={person.number} handlePersonDelete={() => handlePersonDelete(person.name, person.id)} />
                 </div>
             )
         })
@@ -22,7 +22,7 @@ const FilteredNames = (props) => {
 
         return (
             <div>
-                <Names persons={props.persons} />
+                <Names persons={persons} handlePersonDelete={handlePersonDelete} />
             </div>
         )
     }

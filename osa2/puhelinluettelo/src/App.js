@@ -1,68 +1,101 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
 import FilteredNames from './components/FilteredNames'
+import personService from './services/persons'
+import Notification from './components/Notification'
 
 
 
 
 const App = () => {
 
-    const [persons, setPersons] = useState([
-    ])
+    const [persons, setPersons] = useState([])
 
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
     const [filter, setNewFilter] = useState('')
+    const [message, setMessage] = useState('some error happened...')
+    const [error, setError] = useState()
 
     const addPerson = (event) => {
         event.preventDefault()
-        console.log('button clicked', event.target);
 
         const personObject = {
             name: newName,
             number: newNumber.toString()
         }
-        if (persons.find(person => person.name === newName)) {
-            window.alert(`${newName} is already on the phonebook!`)
+        let personToFind
+        if (persons.length > 0) {
+            personToFind = persons.find(person => person.name === newName)
+        }
+
+        if (personToFind !== undefined) {
+            window.confirm(`${newName} is already in the phonebook, do you want to replace the old number with the new one?`)
+            personService.updatePerson(personToFind.id, personObject)
+                .then(returnedPerson => {
+                    setPersons(persons.concat(returnedPerson))
+                    setMessage(`${newName} number has been updated`)
+                    setError(false)
+                    hook()
+                }).catch(error => {
+                    setMessage(`Information of ${newName} has already been removed from server`)
+                    setError(true)
+                })
         }
         else {
-            setPersons(persons.concat(personObject))
-            setNewName('')
+            personService.create(personObject)
+                .then(returnedPerson => {
+                    setPersons(persons.concat(returnedPerson))
+                    setNewName('')
+                    setNewNumber('')
+                    setMessage(`${newName} has been added`)
+                    setError(false)
+                })
+                .catch(error => {
+                    console.log('error', error)
+                    setMessage(`error adding ${newName}`)
+                    setError(true)
+                })
         }
     }
+
 
     const hook = () => {
         console.log('effect')
-        axios
-            .get('http://localhost:3001/persons')
-            .then(response => {
+        personService.getAll()
+            .then(initialPersons => {
                 console.log('promise fulfilled')
-                console.log(response.data)
-                
-                setPersons(response.data)
+                setPersons(initialPersons)
             })
-    }
-    useEffect(hook,[])
 
-    console.log('render', persons.length, 'persons')
+    }
+    useEffect(hook, [])
+
 
     const handleNameChange = (event) => {
-        console.log(event.target.value)
         setNewName(event.target.value)
     }
 
     const handleNumberChange = (event) => {
-        console.log(event.target.value)
         setNewNumber(event.target.value)
     }
     const handleFilteredNameChange = (event) => {
-        console.log(event.target.value)
         setNewFilter(event.target.value)
+    }
+
+    const handlePersonDelete = (name, id) => {
+        window.confirm(`Are you sure to delete ${name} from phonebook?`)
+        personService.deletePerson(id)
+        setMessage(`${name} has been removed`)
+        setError(true)
+        hook()
+        // personServise.deletePerson()
+        //    .then()
     }
 
 
     return (
         <div>
+            <Notification message={message} error={error} />
             <h2>Phonebook</h2>
             <div>
                 filter shown numbers with<input value={filter} onChange={handleFilteredNameChange} />
@@ -77,7 +110,7 @@ const App = () => {
             </form>
             <h2>Numbers</h2>
             <div>
-                <FilteredNames persons={persons} filter={filter} />
+                <FilteredNames persons={persons} filter={filter} handlePersonDelete={handlePersonDelete} />
             </div>
             <br></br>
             <div>debug: {newName} {newNumber}</div>

@@ -1,9 +1,11 @@
 import React from 'react'
+import Button from './Button'
 
-const Person = (props) => {
+const Person = ({ name, number, handlePersonDelete, id }) => {
+
     return (
         <div>
-            {props.name} {props.number}
+            {name} {number} <Button handlePersonDelete={() => handlePersonDelete(name, id)} />
         </div>
     )
 }

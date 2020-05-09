@@ -1,16 +1,17 @@
 import React from 'react'
 import Person from './Person'
 
-const Names = (props) => {
-    const persons = props.persons.map((person) => {
+const Names = ({ persons, handlePersonDelete }) => {
+    const personsToReturn = persons.map((person, i) => {
         return (
-            <div key={person.name}>
-                <Person name={person.name} number={person.number} />
+
+            <div key={i}>
+                <Person name={person.name} number={person.number} handlePersonDelete={() => handlePersonDelete(person.name, person.id)} />
             </div>
         )
     }
     )
-    return (<div>{persons}</div>)
+    return (<div>{personsToReturn}</div>)
 }
 
 export default Names
