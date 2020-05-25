@@ -18,7 +18,7 @@ const App = () => {
   const [message, setMessage] = useState()
   const [error, setError] = useState()
 
-  
+
   const handleLogin = async (event) => {
     event.preventDefault()
     try {
@@ -50,19 +50,19 @@ const App = () => {
   }
 
   const blogList = () => {
-    return(
-    <ul>
-      {
-        blogs.sort((a, b) => (b.likes - a.likes)).map(blog =>
-          <Blog
-            key={blog.id}
-            blog={blog}
-            user={user}
-            handleLike={() => handleLike(blog)}
-            handleDelete={() => handleDelete(blog)} />
-        )
-      }
-    </ul>
+    return (
+      <div id='bloglist' >
+        {
+          blogs.sort((a, b) => (b.likes - a.likes)).map(blog =>
+            <Blog
+              key={blog.id}
+              blog={blog}
+              user={user}
+              handleLike={() => handleLike(blog)}
+              handleDelete={() => handleDelete(blog)} />
+          )
+        }
+      </div>
     )
   }
 
@@ -147,6 +147,7 @@ const App = () => {
   }
 
   const addBlog = async (blogObject) => {
+    
     blogFormRef.current.toggleVisibility()
     try {
       console.log('newblog ', blogObject)
@@ -167,7 +168,7 @@ const App = () => {
   }
   const blogFormRef = React.createRef()
   const blogForm = () => (
-    <Togglable buttonLabel='new blog' ref={blogFormRef}>
+    <Togglable id='new-blog' buttonLabel='new blog' ref={blogFormRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
@@ -183,9 +184,9 @@ const App = () => {
     }
   }, [])
 
-  const renderBlogs = async() => {
-      const initialBlogs = await blogService.getAll()
-      setBlogs(initialBlogs)
+  const renderBlogs = async () => {
+    const initialBlogs = await blogService.getAll()
+    setBlogs(initialBlogs)
   }
 
   useEffect(() => {
@@ -212,7 +213,7 @@ const App = () => {
       {user === null ?
         loginForm() :
         <div>
-          <p>{user.name} logged in <button onClick={handleLogOut}>log out</button></p>
+          <p>{user.name} logged in <button id='logout-button' onClick={handleLogOut}>log out</button></p>
           {blogForm()}
           {blogList()}
         </div>

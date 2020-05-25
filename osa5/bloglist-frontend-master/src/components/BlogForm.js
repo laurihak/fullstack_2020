@@ -1,7 +1,7 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 
-const BlogForm = ({createBlog}) => {
+const BlogForm = ({ createBlog }) => {
   const [newTitle, setNewTitle] = useState('')
   const [newAuthor, setNewAuthor] = useState('')
   const [newUrl, setNewUrl] = useState('')
@@ -15,6 +15,10 @@ const BlogForm = ({createBlog}) => {
   const handleChangeUrl = (event) => {
     setNewUrl(event.target.value)
   }
+  const handleUser = async() => {
+    const user = await window.localStorage.getItem('loggedBlogappUser')
+    return user
+  }
 
   const addBlog = (event) => {
     event.preventDefault()
@@ -22,43 +26,48 @@ const BlogForm = ({createBlog}) => {
       title: newTitle,
       author: newAuthor,
       url: newUrl,
+      user: handleUser() ? null : handleUser()
     })
 
     setNewTitle('')
     setNewAuthor('')
     setNewUrl('')
   }
-  return(
-  <form onSubmit={addBlog} >
-    <div>
-      title:
-    <input
-        type='text'
-        value={newTitle}
-        name='Title'
-        onChange={handleChangeTitle}
-      />
-    </div>
-    <div>
-      author:
-    <input
-        type='text'
-        value={newAuthor}
-        name='Author'
-        onChange={handleChangeAuthor}
-      />
-    </div>
-    <div>
-      url:
-    <input
-        type='text'
-        value={newUrl}
-        name='Url'
-        onChange={handleChangeUrl}
-      />
-    </div>
-    <button type='submit'>create</button>
-  </form>
-)}
+  return (
+    <form onSubmit={addBlog} >
+      <div>
+        title:
+        <input
+          id='title'
+          type='text'
+          value={newTitle}
+          name='Title'
+          onChange={handleChangeTitle}
+        />
+      </div>
+      <div>
+        author:
+        <input
+          id='author'
+          type='text'
+          value={newAuthor}
+          name='Author'
+          onChange={handleChangeAuthor}
+        />
+      </div>
+      <div>
+        url:
+        <input
+          id='url'
+          type='text'
+          value={newUrl}
+          name='Url'
+          onChange={handleChangeUrl}
+        />
+      </div>
+      <button id='create-button' type='submit'>create</button>
+    </form>
+  )
+}
 
 export default BlogForm

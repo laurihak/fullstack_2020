@@ -1,0 +1,11 @@
+POST http://localhost:3001/api/blogs
+Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxhdXJpaCIsImlkIjoiNWViZTU0YzA2ZDQ0MjEyMDI4MjhiNzMzIiwiaWF0IjoxNTg5NTMzNDQ1fQ.Ymev6i1ZCciwX3ysnd3xk177Qky5D1HDGHyVBGKjRRc
+
+{
+    "title": "User id of the note creater at the start is sent along the request",
+    "author": "Lauri Hakala",
+    "url": "www.google.com",
+    "likes": 0,
+    "userId": "5ebe54c06d4421202828b733"
+}

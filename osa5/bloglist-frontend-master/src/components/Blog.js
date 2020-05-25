@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import blogs from '../services/blogs'
 
-const Blog = ({blog, handleLike, handleDelete, user}) => {
+const Blog = ({ blog, handleLike, handleDelete, user }) => {
   const [view, setView] = useState(false)
 
   const blogStyle = {
@@ -13,35 +12,36 @@ const Blog = ({blog, handleLike, handleDelete, user}) => {
     lineHeight: 0.5,
   }
 
-  const handleView = (event) => {
+  const handleView = () => {
     setView(!view)
   }
   if (!view) {
     return (
       <div style={blogStyle}>
-        <p>{blog.title} <button onClick={handleView}>view</button></p>
+        <p>{blog.title} <button id='view-button' onClick={handleView}>view</button></p>
+        <p>{blog.author}</p>
       </div>
     )
   }
-  if(user.username === blog.user.username) {
-      return (
-        <div style={blogStyle}>
-          <p>{blog.title} <button onClick={handleView}>hide</button></p>
-          <p>{blog.author}</p>
-          <p>{blog.likes}<button onClick={handleLike}>like</button></p>
-          <p>{blog.url}<button onClick={handleDelete}>delete</button></p>
-        </div>
-      )
-    }  else {
-      return (
-        <div style={blogStyle}>
-          <p>{blog.title} <button onClick={handleView}>hide</button></p>
-          <p>{blog.author}</p>
-          <p>{blog.likes}<button onClick={handleLike}>like</button></p>
-          <p>{blog.url}</p>
-        </div>
-      )
-    }
+  if (user.username === blog.user.username) {
+    return (
+      <div style={blogStyle}>
+        <p>{blog.title} <button id='hide-button' onClick={handleView}>hide</button></p>
+        <p>{blog.author}</p>
+        <p id='likes'>{blog.likes}<button id='like-button' onClick={handleLike}>like</button></p>
+        <a href={blog.url} alt='no url found' target='_blank' rel='noopener noreferrer'><p>Link to blog</p></a><button id='delete-button' onClick={handleDelete}>delete</button>
+      </div>
+    )
+  } else {
+    return (
+      <div style={blogStyle}>
+        <p>{blog.title} <button onClick={handleView}>hide</button></p>
+        <p>{blog.author}</p>
+        <p>{blog.likes}<button onClick={handleLike}>like</button></p>
+        <a href={blog.url} alt='no url found' target='_blank' rel='noopener noreferrer'><p>Link to Blog</p></a>
+      </div>
+    )
+  }
 }
 
 
