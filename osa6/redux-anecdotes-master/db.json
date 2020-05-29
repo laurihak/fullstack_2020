@@ -2,12 +2,12 @@
   "anecdotes": [
     {
       "content": "If it hurts, do it more often",
-      "votes": 45,
+      "votes": 377,
       "id": "47145"
     },
     {
       "content": "Adding manpower to a late software project makes it later!",
-      "votes": 2,
+      "votes": 11,
       "id": "21149"
     },
     {
@@ -44,6 +44,16 @@
       "content": "asdasdasd",
       "votes": 0,
       "id": "F3Knun2"
+    },
+    {
+      "content": "Käytetään connectia jotta osataan ylläpitää vanhat react sivut",
+      "votes": 0,
+      "id": "f6kSVO0"
+    },
+    {
+      "content": "Käytetään connectia jotta osataan ylläpitää vanhat react sivut toinen osa",
+      "votes": 0,
+      "id": "cVyJPtJ"
     }
   ]
 }
