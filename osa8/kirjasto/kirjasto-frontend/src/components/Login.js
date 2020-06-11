@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
-import { LOGIN } from '../queries'
+import { LOGIN } from '../graphql/mutations'
 
 
-const Login = ({
-  show, setError, setToken, setPage,
-}) => {
+const Login = ({ show, setToken, setPage }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [login, result] = useMutation(LOGIN, {
     onError: (error) => {
-      if (error.graphQLErrors[0]) setError(error.graphQLErrors[0].message)
+      if (error.graphQLErrors[0]) {
+        window.alert(error.graphQLErrors[0].message) // eslint-disable-line no-alert
+      }
     },
   })
 
@@ -68,7 +68,6 @@ const Login = ({
 
 Login.propTypes = {
   show: PropTypes.bool.isRequired,
-  setError: PropTypes.func.isRequired,
   setToken: PropTypes.func.isRequired,
   setPage: PropTypes.func.isRequired,
 }

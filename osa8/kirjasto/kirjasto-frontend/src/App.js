@@ -1,9 +1,6 @@
-
 import React, { useState, useEffect } from 'react'
 import { useSubscription, useApolloClient } from '@apollo/client'
-import {
-  ALL_AUTHORS, ALL_BOOKS, BOOK_ADDED, BOOKS_BYGENRE,
-} from './queries'
+import { ALL_BOOKS, BOOK_ADDED, BOOKS_BYGENRE } from './graphql/queries'
 import Authors from './components/Authors'
 import Books from './components/Books'
 import BookForm from './components/BookForm'
@@ -12,14 +9,11 @@ import Recommended from './components/RecommendedBooks'
 
 const App = () => {
   const [page, setPage] = useState('authors')
-  const [error, setError] = useState(null)
   const [token, setToken] = useState(null)
-  const [authors, setAuthors] = useState([])
   const [books, setBooks] = useState([])
   const [filteredBooks, setFilteredBooks] = useState([])
   const [filter, setFilter] = useState('')
   const client = useApolloClient()
-
 
   const updateCacheWith = (addedBook) => {
     const includedIn = (set, object) => set
@@ -37,10 +31,7 @@ const App = () => {
     const allBooks = await client.query({ query: ALL_BOOKS })
     setBooks(allBooks.data.allBooks)
   }
-  const fetchAuthors = async () => {
-    const allAuthors = await client.query({ query: ALL_AUTHORS })
-    setAuthors(allAuthors.data.allAuthors)
-  }
+
   const fetchFilteredBooks = async () => {
     if (filter.length > 0) {
       const booksByGenre = await client
@@ -54,7 +45,7 @@ const App = () => {
 
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
-      setError(`${subscriptionData.data.bookAdded.title} was just added`)
+      window.alert(`${subscriptionData.data.bookAdded.title} was just added`) // eslint-disable-line no-alert
       updateCacheWith(subscriptionData.data.bookAdded)
     },
     onSubscriptionComplete: () => {
@@ -64,10 +55,6 @@ const App = () => {
   useEffect(() => {
     fetchBooks()
   }, [updateCacheWith]) // eslint-disable-line
-  useEffect(() => {
-    fetchAuthors()
-  }, [updateCacheWith]) // eslint-disable-line
-
   useEffect(() => {
     fetchFilteredBooks()
   }, [updateCacheWith]) // eslint-disable-line
@@ -86,7 +73,6 @@ const App = () => {
 
   return (
     <div>
-      <div>{error}</div>
       <div>
         <button type="button" onClick={() => setPage('authors')}>authors</button>
         <button type="button" onClick={() => setPage('books')}>books</button>
@@ -102,14 +88,11 @@ const App = () => {
       </div>
 
       <Authors
-        setError={setError}
-        authors={authors}
         show={page === 'authors'}
         setPage={setPage}
       />
 
       <Books
-        setError={setError}
         books={books}
         show={page === 'books'}
         setFilter={setFilter}
@@ -117,17 +100,14 @@ const App = () => {
       />
 
       <BookForm
-        setError={setError}
         show={page === 'add'}
       />
       <Login
         setToken={setToken}
-        setError={setError}
         show={page === 'login'}
         setPage={setPage}
       />
       <Recommended
-        setError={setError}
         books={books}
         show={page === 'recommended'}
       />

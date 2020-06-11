@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useMutation } from '@apollo/client'
-import { CREATE_BOOK, ALL_AUTHORS, ALL_BOOKS } from '../queries'
+import { ALL_AUTHORS, ALL_BOOKS } from '../graphql/queries'
+import { CREATE_BOOK } from '../graphql/mutations'
 
-
-const BookForm = ({ show, setError }) => {
+const BookForm = ({ show }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [published, setPublished] = useState('')
@@ -14,10 +14,8 @@ const BookForm = ({ show, setError }) => {
     refetchQueries: [{ query: ALL_AUTHORS }, { query: ALL_BOOKS }],
     onError: (error) => {
       if (error.graphQLErrors[0]) {
-        setError(error.graphQLErrors[0].message)
+        window.alert(error.graphQLErrors[0].message) // eslint-disable-line no-alert
       }
-      console.log('error', error)
-      setError(null)
     },
   })
 
@@ -91,7 +89,6 @@ const BookForm = ({ show, setError }) => {
 
 BookForm.propTypes = {
   show: PropTypes.bool.isRequired,
-  setError: PropTypes.func.isRequired,
 }
 
 export default BookForm

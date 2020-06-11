@@ -2,12 +2,15 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Select from 'react-select'
-import { useMutation } from '@apollo/client'
-import { EDIT_AUTHOR, ALL_AUTHORS } from '../queries'
+import { useMutation, useQuery } from '@apollo/client'
+import { ALL_AUTHORS } from '../graphql/queries'
+import { EDIT_AUTHOR } from '../graphql/mutations'
 
-const Authors = ({ show, setError, authors }) => {
+
+const Authors = ({ show, setError }) => {
   const [selectedOption, setSelectedOption] = useState('')
   const [year, setYear] = useState('')
+  const authorsData = useQuery(ALL_AUTHORS)
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
     onError: (error) => {
@@ -18,14 +21,15 @@ const Authors = ({ show, setError, authors }) => {
     },
   })
 
+
   if (!show) {
     return null
   }
-  if (authors.loading) {
+  if (authorsData.loading) {
     return <div>loading...</div>
   }
 
-
+  const authors = authorsData.data.allAuthors
   const submit = async (event) => {
     event.preventDefault()
     const yearNumber = parseInt(year, 10)
@@ -91,8 +95,6 @@ const Authors = ({ show, setError, authors }) => {
 }
 
 Authors.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  authors: PropTypes.array.isRequired,
   setError: PropTypes.func.isRequired,
   show: PropTypes.bool.isRequired,
 }

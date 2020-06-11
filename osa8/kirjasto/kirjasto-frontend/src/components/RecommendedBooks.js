@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useApolloClient } from '@apollo/client'
-import { ALL_BOOKS, GET_ME } from '../queries'
+import { ALL_BOOKS, GET_ME } from '../graphql/queries'
 
 const RecommendedBooks = ({ show }) => {
   const [filter, setFilter] = useState('')
