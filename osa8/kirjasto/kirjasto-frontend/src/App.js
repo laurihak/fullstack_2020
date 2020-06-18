@@ -91,14 +91,12 @@ const App = () => {
         show={page === 'authors'}
         setPage={setPage}
       />
-
       <Books
         books={books}
         show={page === 'books'}
         setFilter={setFilter}
         filteredBooks={filteredBooks}
       />
-
       <BookForm
         show={page === 'add'}
       />
