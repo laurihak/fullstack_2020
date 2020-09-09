@@ -1,22 +1,20 @@
 
-import patients from '../data/patients.json';
-
-import { PatientEntry, NonSensitivePatientEntry, NewPatientEntry } from '../types/Patient';
+import patients from '../data/patients';
+import { Patient, NonSensitivePatientEntry, NewPatientEntry } from '../types/Patient';
 import toNewPatientEntry from '../utils/patient';
 
-const patientEntries: PatientEntry[] = patients.map(obj => {
-  const object = toNewPatientEntry(obj) as PatientEntry;
+const patientEntries: Patient[] = patients.map(obj => {
+  const object = toNewPatientEntry(obj) as Patient;
   object.id = obj.id;
   return object;
 });
 
-const getEntries = (): PatientEntry[] => {
+const getEntries = (): Patient[] => {
   return patientEntries;
 };
 
-const getEntryById = (id: string): PatientEntry | undefined => {
-  const patient = patientEntries.find(p => p.id.includes(id)) as PatientEntry;
-  patient.entries = [];
+const getEntryById = (id: string): Patient | undefined => {
+  const patient = patientEntries.find(p => p.id.includes(id)) as Patient;
   return patient;
 };
 
@@ -29,7 +27,7 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
     occupation
   }));
 };
-const addEntry = (entry: NewPatientEntry): PatientEntry => {
+const addEntry = (entry: NewPatientEntry): Patient => {
   console.log('adding new entry');
   const newPatientEntry = {
     id: patients.length.toString(),

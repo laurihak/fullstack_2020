@@ -2,8 +2,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { NewPatientEntry } from '../types/Patient';
-
+import { NewPatientEntry, Gender } from '../types/Patient';
+//PatientEntry 
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 const toNewPatientEntry = (object: any): NewPatientEntry => { // eslint-disable-line @typescript-eslint/no-explicit-any
@@ -12,7 +12,8 @@ const toNewPatientEntry = (object: any): NewPatientEntry => { // eslint-disable-
     gender: parseGender(object.gender),
     dateOfBirth: parseDate(object.dateOfBirth),
     ssn: parseSsn(object.ssn),
-    occupation: parseOccupation(object.occupation)
+    occupation: parseOccupation(object.occupation),
+    entries: object.entries
   };
   return newEntry;
 };
@@ -65,10 +66,5 @@ const parseGender = (gender: any): Gender => {
   return gender;
 };
 
-export enum Gender {
-  Male = 'male',
-  Female = 'female',
-  Other = 'other',
-}
 
 export default toNewPatientEntry;
