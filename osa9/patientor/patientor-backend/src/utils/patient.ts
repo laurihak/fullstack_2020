@@ -2,12 +2,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { NewPatientEntry, Gender } from '../types/Patient';
+import { NewPatient, Gender, NewBaseEntry, NewEntry } from '../types/Patient';
+import { Diagnosis } from '../types/Diagnose'
+import { HealthCheckRating, Discharge, SickLeave } from '../types/Patient'
 //PatientEntry 
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-const toNewPatientEntry = (object: any): NewPatientEntry => { // eslint-disable-line @typescript-eslint/no-explicit-any
-  const newEntry: NewPatientEntry = {
+const toNewPatient = (object: any): NewPatient => {
+  const newPatient: NewPatient = {
     name: parseName(object.name),
     gender: parseGender(object.gender),
     dateOfBirth: parseDate(object.dateOfBirth),
@@ -15,31 +16,94 @@ const toNewPatientEntry = (object: any): NewPatientEntry => { // eslint-disable-
     occupation: parseOccupation(object.occupation),
     entries: object.entries
   };
+  return newPatient;
+};
+
+const toNewEntryBase = (object: any): NewBaseEntry => {
+  const newEntry: NewBaseEntry = {
+    type: parseEntryType(object.type),
+    description: parseDescriptionType(object.description),
+    date: parseDate(object.date),
+    specialist: parseSpecialistType(object.specialist),
+  };
+  if (object.diagnosisCodes) {
+    newEntry.diagnosisCodes = parseDiagnosisCodes(object.diagnosisCodes);
+  }
   return newEntry;
 };
 
+const parseHealthCheckRating = (healthCheckRating: any): HealthCheckRating => {
+  console.log('healtcheck rating now', !healthCheckRating)
+  if (healthCheckRating) {
+    throw new Error(`Invalid or missing healthCheckRating: ${healthCheckRating}`);
+  }
+  return healthCheckRating;
+};
+
+const parseSickLeave = (sickLeave: any): SickLeave => {
+  if (!sickLeave) {
+    throw new Error(`Invalid or missing discharge: ${sickLeave}`);
+  }
+  return {
+    startDate: parseDate(sickLeave.startDate),
+    endDate: parseDate(sickLeave.endDate)
+  }
+};
+const parseDischarge = (discharge: any): Discharge => {
+  if (!discharge) {
+    throw new Error(`Invalid or missing discharge: ${discharge}`);
+  }
+  return {
+    date: parseDate(discharge.startDate),
+    criteria: parseCriteria(discharge.enddate)
+  }
+};
+const parseDiagnosisCodes = (diagnosisCodes: any): Array<Diagnosis['code']> => {
+  if (!diagnosisCodes || !Array.isArray(diagnosisCodes)) {
+    throw new Error(`Invalid or missing diagnosis: ${diagnosisCodes}`);
+  }
+  return diagnosisCodes;
+};
+const parseEntryType = (type: any): string => {
+  if (!type || !isString(type)) {
+    throw new Error(`Invalid or missing type: ${type}`);
+  }
+  return type;
+};
+const parseCriteria = (criteria: any): string => {
+  if (!criteria || !isString(criteria)) {
+    throw new Error(`Invalid or missing criteria: ${criteria}`);
+  }
+  return criteria;
+};
+const parseDescriptionType = (description: any): string => {
+  if (!description || !isString(description)) {
+    throw new Error(`Invalid or missing description: ${description}`);
+  }
+  return description;
+};
+const parseSpecialistType = (specialist: any): string => {
+  if (!specialist || !isString(specialist)) {
+    throw new Error(`Invalid or missing specialist: ${specialist}`);
+  }
+  return specialist;
+};
 const parseName = (name: any): string => {
   if (!name || !isString(name)) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Invalid or missing name: ${name}`);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return name;
 };
 const parseSsn = (ssn: any): string => {
   if (!ssn || !isString(ssn)) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Invalid or missing ssn: ${ssn}`);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return ssn;
 };
 const parseOccupation = (occupation: any): string => {
   if (!occupation || !isString(occupation)) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Invalid or missing occupation: ${occupation}`);
   }
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return occupation;
 };
 const isString = (text: any): text is string => {
@@ -50,8 +114,8 @@ const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 const parseDate = (date: any): string => {
+  console.log('date now', date)
   if (!date || !isString(date) || !isDate(date)) {
-    // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
     throw new Error(`Incorrect or missing date: ${date}`);
   }
   return date;
@@ -65,6 +129,24 @@ const parseGender = (gender: any): Gender => {
   }
   return gender;
 };
+export const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled entry type: ${JSON.stringify(value)}`
+  );
+};
 
+const toNewEntry = (object: any): NewEntry => {
+  const baseEntry: NewEntry = toNewEntryBase(object) as NewEntry;
+  switch (baseEntry.type) {
+    case 'Hospital':
+      return {...baseEntry, discharge: parseDischarge(object.discharge), }
+    case 'HealthCheck':
+      return {...baseEntry, healthCheckRating: parseHealthCheckRating(object.healthCheckRating) }
+    case 'OccupationalHealthcare':
+      return {...baseEntry, sickLeave: parseSickLeave(object.sickLeave), employerName: parseName(object.employerName)}
+    default:
+      return assertNever(baseEntry);
+  }
+};
 
-export default toNewPatientEntry;
+export { toNewEntry, toNewPatient as toNewPatientEntry };

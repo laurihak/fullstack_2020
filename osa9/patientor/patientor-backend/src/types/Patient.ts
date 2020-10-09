@@ -4,6 +4,7 @@ import { Diagnosis } from './Diagnose';
 
 interface BaseEntry {
   id: string;
+  type: string;
   description: string;
   date: string;
   specialist: string;
@@ -35,18 +36,22 @@ interface HealthCheckEntry extends BaseEntry {
 }
 interface HospitalEntry extends BaseEntry {
   type: "Hospital";
-  discharge: {
-    date: string,
-    criteria: string
-  }
+  discharge: Discharge
+}
+
+export interface Discharge {
+  date: string,
+  criteria: string
 }
 interface OccupationalHealthcareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string,
-  sickLeave?: {
-    startDate: string,
-    endDate: string
-  }
+  sickLeave?: SickLeave
+}
+
+export interface SickLeave {
+  startDate: string;
+  endDate: string;
 }
 
 export enum Gender {
@@ -66,5 +71,12 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
-export type NonSensitivePatientEntry = Omit<Patient, 'ssn' | 'entries'>;
-export type NewPatientEntry = Omit<Patient, 'id'>;
+export type NonSensitivePatient = Omit<Patient, 'ssn' | 'entries'>;
+export type NewPatient = Omit<Patient, 'id'>;
+export type NewBaseEntry = Omit<BaseEntry, 'id'>;
+
+type DistributiveOmit<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never;
+
+export type NewEntry = DistributiveOmit<Entry, 'id'>;

@@ -1,12 +1,13 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Container, Icon, Table, TableBody } from "semantic-ui-react";
+import { Icon, Table, TableBody } from "semantic-ui-react";
 
 import { Patient, Entry, Diagnosis } from "../types";
 import { useStateValue } from "../state";
 import axios from "axios";
 import { apiBaseUrl } from "../constants";
 import { setPatient } from "../state/reducer";
+import EntryDetails from '../components/EntryDetails'
 
 const PatientInformationPage: React.FC = () => {
   const [{ patient, diagnosis }, dispatch] = useStateValue();
@@ -29,8 +30,6 @@ const PatientInformationPage: React.FC = () => {
     fetchPatient();
   }, [id]);
 
-  console.log('diagnosis now', diagnosis);
-
   return (
     <div className="App">
       {!patient ? null
@@ -41,38 +40,28 @@ const PatientInformationPage: React.FC = () => {
             <p>ssn: {p.ssn}</p>
             <p>occupation: {p.occupation}</p>
             <div>
-              <h3>entries</h3>
+              {!p.entries?.length ? <h3>No Entries</h3>
+                : <h3>Entries</h3>}
               {!p.entries ? null
                 : Object.values(p.entries).map((e: Entry, i) => (
                   <div key={i}>
                     {console.log('entry now', e.date)}
-                    <Table>
-                      <TableBody>
-                        <Table.Row>
-                          <Table.Cell><div>{e.date}<Icon name='user md' size='huge'/></div>
-                            <div> {e.description}</div>
-                            <div><Icon color='green' name='heart'/></div>
-                          </Table.Cell>
-                        </Table.Row>
-                      </TableBody>
-                    </Table>
-                    <Container>
+                    <EntryDetails entry={e}/>
                       <Table fixed>
                         <TableBody>
-                          {!diagnosis ? <p>No Diagnosis</p>
-                            : Object.values(diagnosis).map((diagnosisToCompare: Diagnosis) => {
+                          {!e.diagnosisCodes ? null
+                            : <Table.Row><Table.Cell><b>Diagnoses</b></Table.Cell></Table.Row>}{Object.values(diagnosis).map((diagnosisToCompare: Diagnosis) => {
                               return (
                                 e.diagnosisCodes?.map(d => (
                                   d !== (diagnosisToCompare.code) ? null
                                     : <Table.Row key={diagnosisToCompare.code}>
                                       <Table.Cell key={diagnosisToCompare.code}>{diagnosisToCompare.code}</Table.Cell>
-                                      <Table.Cell> {diagnosisToCompare.name}</Table.Cell>
+                                      <Table.Cell>{diagnosisToCompare.name}</Table.Cell>
                                     </Table.Row>
                                 )));
                             })}
                         </TableBody>
                       </Table>
-                    </Container>
                   </div>
                 ))
               }</div>

@@ -1,24 +1,24 @@
 
 import patients from '../data/patients';
-import { Patient, NonSensitivePatientEntry, NewPatientEntry } from '../types/Patient';
-import toNewPatientEntry from '../utils/patient';
+import { Patient, NonSensitivePatient, NewPatient, NewEntry } from '../types/Patient';
+import {toNewPatientEntry} from '../utils/patient';
 
-const patientEntries: Patient[] = patients.map(obj => {
+let patientEntries: Patient[] = patients.map(obj => {
   const object = toNewPatientEntry(obj) as Patient;
   object.id = obj.id;
   return object;
 });
 
-const getEntries = (): Patient[] => {
+const getPatients = (): Patient[] => {
   return patientEntries;
 };
 
-const getEntryById = (id: string): Patient | undefined => {
+const getPatientById = (id: string): Patient | undefined => {
   const patient = patientEntries.find(p => p.id.includes(id)) as Patient;
   return patient;
 };
 
-const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
+const getNonSensitivePatients = (): NonSensitivePatient[] => {
   return patientEntries.map(({ id, dateOfBirth, gender, name, occupation }) => ({
     id,
     dateOfBirth,
@@ -27,15 +27,24 @@ const getNonSensitiveEntries = (): NonSensitivePatientEntry[] => {
     occupation
   }));
 };
-const addEntry = (entry: NewPatientEntry): Patient => {
-  console.log('adding new entry');
+const addPatient = (patient: NewPatient): Patient => {
+  console.log('adding new patient');
   const newPatientEntry = {
     id: patients.length.toString(),
-    ...entry
+    ...patient
   };
-  patients.push(newPatientEntry);
+  patients.concat(newPatientEntry);
   console.log('patients now', patients);
   return newPatientEntry;
 };
 
-export default { getEntries, addEntry, getNonSensitiveEntries, getEntryById };
+const addEntryForPatient = (newEntry: NewEntry, patient: Patient): Patient => {
+  const newEntryToPatient = {...newEntry, id: '1'}
+  const savedPatient = { ...patient, entries: patient.entries.concat(newEntryToPatient) };
+  patientEntries = patientEntries.map(p => 
+    p.id === savedPatient.id ? savedPatient : p)
+  return savedPatient;
+};
+
+
+export default { getPatients, addPatient, getNonSensitivePatients, getPatientById, addEntryForPatient };
