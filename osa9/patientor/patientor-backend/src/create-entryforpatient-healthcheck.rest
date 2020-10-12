@@ -5,6 +5,6 @@ Content-Type: application/json
       "type": "HealthCheck",
       "date": "2019-10-20",
       "specialist": "MD House",
-      "description": "Yearly control visit. Cholesterol levels back to normal.",
+      "description": "Yearly control visit.2 Cholesterol levels back to normal.",
       "healthCheckRating": 0
 }

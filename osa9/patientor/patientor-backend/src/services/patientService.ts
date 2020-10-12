@@ -3,6 +3,8 @@ import patients from '../data/patients';
 import { Patient, NonSensitivePatient, NewPatient, NewEntry } from '../types/Patient';
 import {toNewPatientEntry} from '../utils/patient';
 
+import { v4 as uuidv4 } from 'uuid';
+
 let patientEntries: Patient[] = patients.map(obj => {
   const object = toNewPatientEntry(obj) as Patient;
   object.id = obj.id;
@@ -39,7 +41,7 @@ const addPatient = (patient: NewPatient): Patient => {
 };
 
 const addEntryForPatient = (newEntry: NewEntry, patient: Patient): Patient => {
-  const newEntryToPatient = {...newEntry, id: '1'}
+  const newEntryToPatient = {...newEntry, id: uuidv4()}
   const savedPatient = { ...patient, entries: patient.entries.concat(newEntryToPatient) };
   patientEntries = patientEntries.map(p => 
     p.id === savedPatient.id ? savedPatient : p)

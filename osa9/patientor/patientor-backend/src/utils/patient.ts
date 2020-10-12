@@ -33,8 +33,8 @@ const toNewEntryBase = (object: any): NewBaseEntry => {
 };
 
 const parseHealthCheckRating = (healthCheckRating: any): HealthCheckRating => {
-  console.log('healtcheck rating now', !healthCheckRating)
-  if (healthCheckRating) {
+  console.log('healtcheck rating now', healthCheckRating)
+  if (healthCheckRating < 0 || healthCheckRating > 3 || !Number.isInteger(healthCheckRating)) {
     throw new Error(`Invalid or missing healthCheckRating: ${healthCheckRating}`);
   }
   return healthCheckRating;
@@ -54,8 +54,8 @@ const parseDischarge = (discharge: any): Discharge => {
     throw new Error(`Invalid or missing discharge: ${discharge}`);
   }
   return {
-    date: parseDate(discharge.startDate),
-    criteria: parseCriteria(discharge.enddate)
+    date: parseDate(discharge.date),
+    criteria: parseCriteria(discharge.criteria)
   }
 };
 const parseDiagnosisCodes = (diagnosisCodes: any): Array<Diagnosis['code']> => {

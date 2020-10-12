@@ -58,5 +58,17 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+  export type NewEntry =
+  | Omit<HospitalEntry, "id">
+  | Omit<OccupationalHealthcareEntry, "id">
+  | Omit<HealthCheckEntry, "id">;
+
+  export enum EntryType {
+    HospitalEntry = "Hospital",
+    OccupationalHealthcareEntry = "OccupationalHealthcare",
+    HealthCheckEntry = "HealthCheck"
+  }
+  
+
 export type NonSensitivePatientEntry = Omit<Patient, 'ssn' | 'entries'>;
 export type NewPatientEntry = Omit<Patient, 'id'>;

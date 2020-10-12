@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/entries', (req, res) => {
-  console.log('adding entry now ')
+  console.log('adding entry now')
   const patient = patientService.getPatientById(req.params.id) as Patient
   try {
     const newEntry = toNewEntry(req.body); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
