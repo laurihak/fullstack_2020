@@ -23,9 +23,9 @@ const App: React.FC = () => {
 				);
 				dispatch(setPatientList(patientListFromApi));
 			} catch (e) {
-				console.error(e);
+				// logging error (e) here
 			}
-    
+
 		};
 		const fetchDiagnosis = async () => {
 			try {
@@ -34,14 +34,14 @@ const App: React.FC = () => {
 				);
 				dispatch(setDiagnosis(diagnosisListFromApi));
 			} catch (e) {
-				console.error(e);
+				// logging error here (e)
 			}
 		};
 		fetchDiagnosis();
 		fetchPatientList();
 	}, [dispatch]);
 
-  
+
 
 	return (
 		<div className="App">

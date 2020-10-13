@@ -47,7 +47,6 @@ const PatientInformationPage: React.FC = () => {
 			dispatch(updatePatient(updatedPatient));
 			closeModal();
 		} catch (e) {
-			console.error(e.response.data);
 			setError(e.response.data.error);
 		}
 	};
@@ -74,7 +73,6 @@ const PatientInformationPage: React.FC = () => {
 			{!patient ? null
 				: Object.values(patient).map((p: Patient) => (
 					<div key={p.id}>
-						{console.log('entries now', p.entries)}
 						<h2>{p.name} {p.gender === 'male' ? <Icon name="mars"></Icon> : <Icon name="venus"></Icon>}</h2>
 						<p>ssn: {p.ssn}</p>
 						<p>occupation: {p.occupation}</p>
@@ -84,7 +82,6 @@ const PatientInformationPage: React.FC = () => {
 							{!p.entries ? null
 								: Object.values(p.entries).map((e: Entry, i) => (
 									<div key={e.id}>
-										{console.log('entry now', e.date)}
 										<Card fluid>
 											<EntryDetails entry={e}/>
 											<Table key={i}>

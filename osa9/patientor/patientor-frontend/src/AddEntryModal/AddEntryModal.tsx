@@ -73,7 +73,6 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
 		schema = HealthCheckSchema;
 	}
 
-	console.log('type is', type);
 	return (
 		<Formik
 			initialValues={{

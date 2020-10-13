@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 import { Grid, Button } from 'semantic-ui-react';
 import { Field, Formik, Form } from 'formik';
