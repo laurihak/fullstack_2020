@@ -1,7 +1,7 @@
 import express from 'express';
 import patientService from '../services/patientService';
 import {toNewPatientEntry, toNewEntry} from '../utils/patient';
-import {Patient} from '../types/Patient'
+import {Patient} from '../types/Patient';
 
 const router = express.Router();
 
@@ -26,12 +26,12 @@ router.post('/', (req, res) => {
 });
 
 router.post('/:id/entries', (req, res) => {
-  console.log('adding entry now')
-  const patient = patientService.getPatientById(req.params.id) as Patient
+  console.log('adding entry now');
+  const patient = patientService.getPatientById(req.params.id) as Patient;
   try {
     const newEntry = toNewEntry(req.body); // eslint-disable-line @typescript-eslint/no-unsafe-assignment
     const addedEntry = patientService.addEntryForPatient(newEntry, patient);
-    console.log(addedEntry)
+    console.log(addedEntry);
     res.send('addedEntry');
   } catch (e) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access

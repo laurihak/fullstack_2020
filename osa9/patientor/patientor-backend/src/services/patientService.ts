@@ -41,10 +41,10 @@ const addPatient = (patient: NewPatient): Patient => {
 };
 
 const addEntryForPatient = (newEntry: NewEntry, patient: Patient): Patient => {
-  const newEntryToPatient = {...newEntry, id: uuidv4()}
+  const newEntryToPatient = {...newEntry, id: uuidv4()};
   const savedPatient = { ...patient, entries: patient.entries.concat(newEntryToPatient) };
   patientEntries = patientEntries.map(p => 
-    p.id === savedPatient.id ? savedPatient : p)
+    p.id === savedPatient.id ? savedPatient : p);
   return savedPatient;
 };
 

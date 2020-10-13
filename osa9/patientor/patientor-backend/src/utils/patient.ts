@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { NewPatient, Gender, NewBaseEntry, NewEntry } from '../types/Patient';
-import { Diagnosis } from '../types/Diagnose'
-import { HealthCheckRating, Discharge, SickLeave } from '../types/Patient'
+import { Diagnosis } from '../types/Diagnose';
+import { HealthCheckRating, Discharge, SickLeave } from '../types/Patient';
 //PatientEntry 
 
 const toNewPatient = (object: any): NewPatient => {
@@ -33,7 +35,7 @@ const toNewEntryBase = (object: any): NewBaseEntry => {
 };
 
 const parseHealthCheckRating = (healthCheckRating: any): HealthCheckRating => {
-  console.log('healtcheck rating now', healthCheckRating)
+  console.log('healtcheck rating now', healthCheckRating);
   if (healthCheckRating < 0 || healthCheckRating > 3 || !Number.isInteger(healthCheckRating)) {
     throw new Error(`Invalid or missing healthCheckRating: ${healthCheckRating}`);
   }
@@ -47,7 +49,7 @@ const parseSickLeave = (sickLeave: any): SickLeave => {
   return {
     startDate: parseDate(sickLeave.startDate),
     endDate: parseDate(sickLeave.endDate)
-  }
+  };
 };
 const parseDischarge = (discharge: any): Discharge => {
   if (!discharge) {
@@ -56,7 +58,7 @@ const parseDischarge = (discharge: any): Discharge => {
   return {
     date: parseDate(discharge.date),
     criteria: parseCriteria(discharge.criteria)
-  }
+  };
 };
 const parseDiagnosisCodes = (diagnosisCodes: any): Array<Diagnosis['code']> => {
   if (!diagnosisCodes || !Array.isArray(diagnosisCodes)) {
@@ -114,7 +116,7 @@ const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
 };
 const parseDate = (date: any): string => {
-  console.log('date now', date)
+  console.log('date now', date);
   if (!date || !isString(date) || !isDate(date)) {
     throw new Error(`Incorrect or missing date: ${date}`);
   }
@@ -139,11 +141,11 @@ const toNewEntry = (object: any): NewEntry => {
   const baseEntry: NewEntry = toNewEntryBase(object) as NewEntry;
   switch (baseEntry.type) {
     case 'Hospital':
-      return {...baseEntry, discharge: parseDischarge(object.discharge), }
+      return {...baseEntry, discharge: parseDischarge(object.discharge), };
     case 'HealthCheck':
-      return {...baseEntry, healthCheckRating: parseHealthCheckRating(object.healthCheckRating) }
+      return {...baseEntry, healthCheckRating: parseHealthCheckRating(object.healthCheckRating) };
     case 'OccupationalHealthcare':
-      return {...baseEntry, sickLeave: parseSickLeave(object.sickLeave), employerName: parseName(object.employerName)}
+      return {...baseEntry, sickLeave: parseSickLeave(object.sickLeave), employerName: parseName(object.employerName)};
     default:
       return assertNever(baseEntry);
   }
